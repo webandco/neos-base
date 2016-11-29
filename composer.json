@@ -1,0 +1,18 @@
+{
+    "description": "",
+    "type": "neos-package",
+    "name": "webandco/base",
+    "require": {
+        "typo3/flow": "*"
+    },
+    "autoload": {
+        "psr-0": {
+            "Webandco\\Base": "Classes/"
+        }
+    },
+    "extra": {
+        "neos": {
+            "package-key": "Webandco.Base"
+        }
+    }
+}

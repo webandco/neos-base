@@ -1,7 +1,7 @@
 <?php
 namespace Webandco\Base\ViewHelpers\ContentElement;
 /*
- * This file is part of the TYPO3.Neos package.
+ * This file is part of the Neos package.
  *
  * (c) Contributors of the Neos Project - www.neos.io
  *
@@ -10,14 +10,14 @@ namespace Webandco\Base\ViewHelpers\ContentElement;
  * source code.
  */
 
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Flow\Security\Authorization\PrivilegeManagerInterface;
-use TYPO3\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
-use TYPO3\Fluid\Core\ViewHelper\Exception as ViewHelperException;
-use TYPO3\Neos\Domain\Service\ContentContext;
-use TYPO3\TYPO3CR\Domain\Model\NodeInterface;
-use TYPO3\TYPO3CR\Service\AuthorizationService;
-use TYPO3\TypoScript\ViewHelpers\TypoScriptContextTrait;
+use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Security\Authorization\PrivilegeManagerInterface;
+use Neos\FluidAdaptor\Core\ViewHelper\AbstractTagBasedViewHelper;
+use Neos\FluidAdaptor\Core\ViewHelper\Exception as ViewHelperException;
+use Neos\Neos\Domain\Service\ContentContext;
+use Neos\ContentRepository\Domain\Model\NodeInterface;
+use Neos\ContentRepository\Service\AuthorizationService;
+use Neos\Fusion\ViewHelpers\FusionContextTrait;
 
 /**
  * Renders a wrapper around the inner contents of the tag to enable frontend editing.
@@ -33,7 +33,7 @@ use TYPO3\TypoScript\ViewHelpers\TypoScriptContextTrait;
  */
 class EditableViewHelper extends AbstractTagBasedViewHelper
 {
-    use TypoScriptContextTrait;
+    use FusionContextTrait;
 
     /**
      * @Flow\Inject
@@ -92,7 +92,7 @@ class EditableViewHelper extends AbstractTagBasedViewHelper
 
         /** @var $contentContext ContentContext */
         $contentContext = $node->getContext();
-        if ($contentContext->getWorkspaceName() === 'live' || !$this->privilegeManager->isPrivilegeTargetGranted('TYPO3.Neos:Backend.GeneralAccess')) {
+        if ($contentContext->getWorkspaceName() === 'live' || !$this->privilegeManager->isPrivilegeTargetGranted('Neos.Neos:Backend.GeneralAccess')) {
             return ($removeWrap) ? $this->tag->getContent() : $this->tag->render();
         }
 
@@ -100,7 +100,7 @@ class EditableViewHelper extends AbstractTagBasedViewHelper
             return ($removeWrap) ? $this->tag->getContent() : $this->tag->render();
         }
 
-        $this->tag->addAttribute('property', 'typo3:' . $property);
+        $this->tag->addAttribute('property', 'neos:' . $property);
         $this->tag->addAttribute('data-neos-node-type', $node->getNodeType()->getName());
         $this->tag->addAttribute('class', $this->tag->hasAttribute('class') ? 'neos-inline-editable ' . $this->tag->getAttribute('class') : 'neos-inline-editable');
         return '<div ' . $attributes . '>' . $this->tag->render() . '</div>';

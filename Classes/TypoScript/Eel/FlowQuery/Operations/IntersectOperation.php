@@ -2,15 +2,15 @@
 namespace Webandco\Base\TypoScript\Eel\FlowQuery\Operations;
 
 /*                                                                              *
- * This script belongs to the TYPO3 Flow package "Webandco.Taxonomy".           *
+ * This script belongs to the Neos Flow package "Webandco.Taxonomy".           *
  * Used to get a list of related Entries                                        *
  *                                                                              */
 
-use TYPO3\Eel\FlowQuery\FlowQuery;
-use TYPO3\Eel\FlowQuery\Operations\AbstractOperation;
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\TYPO3CR\Domain\Model\Node;
-use TYPO3\TYPO3CR\Domain\Model\NodeInterface;
+use Neos\Eel\FlowQuery\FlowQuery;
+use Neos\Eel\FlowQuery\Operations\AbstractOperation;
+use Neos\Flow\Annotations as Flow;
+use Neos\ContentRepository\Domain\Model\Node;
+use Neos\ContentRepository\Domain\Model\NodeInterface;
 
 /**
  * EEL intersect() operation finds cut set of nodes
@@ -19,20 +19,20 @@ use TYPO3\TYPO3CR\Domain\Model\NodeInterface;
 class IntersectOperation extends AbstractOperation {
 
     /**
-     * @var \TYPO3\Flow\Log\SystemLoggerInterface
+     * @var \Neos\Flow\Log\SystemLoggerInterface
      * @Flow\Inject
      */
     protected $systemLogger;
 
     /**
-     * @var \TYPO3\TYPO3CR\Domain\Repository\NodeDataRepository
+     * @var \Neos\ContentRepository\Domain\Repository\NodeDataRepository
      * @Flow\Inject
      */
     protected $nodeRepository;
 
     /**
      * @Flow\Inject
-     * @var \TYPO3\Neos\Service\UserService
+     * @var \Neos\Neos\Service\UserService
      */
     protected $userService;
 
@@ -53,7 +53,7 @@ class IntersectOperation extends AbstractOperation {
     /**
      * {@inheritdoc}
      *
-     * We can only handle TYPO3CR Nodes.
+     * We can only handle NeosCR Nodes.
      *
      * @param mixed $context
      * @return boolean
@@ -74,7 +74,7 @@ class IntersectOperation extends AbstractOperation {
 
         // @todo: check if all arguments are available
         if (!isset($arguments[0]) || empty($arguments[0])) {
-            throw new \TYPO3\Eel\FlowQuery\FlowQueryException('intersect() needs property name by which nodes should be matched', 1430401014);
+            throw new \Neos\Eel\FlowQuery\FlowQueryException('intersect() needs property name by which nodes should be matched', 1430401014);
         } else if (!is_array($arguments[2]) || count($arguments[2]) === 0) {
             //return the query if the second argument is not set.
             return $flowQuery->getContext();

@@ -23,10 +23,10 @@
         "email": "support@webandco.com"
     },
     "require": {
-        "typo3/neos": "^2.0"
+        "neos/flow": "4.*"
     },
     "autoload": {
-        "psr-0": {
+        "psr-4": {
             "Webandco\\Base": "Classes/"
         }
     },

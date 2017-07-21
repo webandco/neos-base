@@ -1,7 +1,7 @@
 <?php
 namespace Webandco\Base\ViewHelpers\ContentElement;
 /*
- * This file is part of the Neos package.
+ * This file is part of the Neos.Neos package.
  *
  * (c) Contributors of the Neos Project - www.neos.io
  *
@@ -18,6 +18,7 @@ use Neos\Neos\Domain\Service\ContentContext;
 use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Service\AuthorizationService;
 use Neos\Fusion\ViewHelpers\FusionContextTrait;
+use Neos\Neos\Service\ContentElementEditableService;
 
 /**
  * Renders a wrapper around the inner contents of the tag to enable frontend editing.
@@ -46,6 +47,12 @@ class EditableViewHelper extends AbstractTagBasedViewHelper
      * @var AuthorizationService
      */
     protected $nodeAuthorizationService;
+
+    /**
+     * @Flow\Inject
+     * @var ContentElementEditableService
+     */
+    protected $contentElementEditableService;
 
     /**
      * @return void
@@ -79,7 +86,7 @@ class EditableViewHelper extends AbstractTagBasedViewHelper
         }
 
         if ($node === null) {
-            throw new ViewHelperException('A node is required, but one was not supplied and could not be found in the TypoScript context.', 1408521638);
+            throw new ViewHelperException('A node is required, but one was not supplied and could not be found in the Fusion context.', 1408521638);
         }
 
         if ($content === null) {
@@ -90,7 +97,7 @@ class EditableViewHelper extends AbstractTagBasedViewHelper
         }
         $this->tag->setContent($content);
 
-        /** @var $contentContext ContentContext */
+         /** @var $contentContext ContentContext */
         $contentContext = $node->getContext();
         if ($contentContext->getWorkspaceName() === 'live' || !$this->privilegeManager->isPrivilegeTargetGranted('Neos.Neos:Backend.GeneralAccess')) {
             return ($removeWrap) ? $this->tag->getContent() : $this->tag->render();
@@ -100,10 +107,7 @@ class EditableViewHelper extends AbstractTagBasedViewHelper
             return ($removeWrap) ? $this->tag->getContent() : $this->tag->render();
         }
 
-        $this->tag->addAttribute('property', 'neos:' . $property);
-        $this->tag->addAttribute('data-neos-node-type', $node->getNodeType()->getName());
-        $this->tag->addAttribute('class', $this->tag->hasAttribute('class') ? 'neos-inline-editable ' . $this->tag->getAttribute('class') : 'neos-inline-editable');
-        return '<div ' . $attributes . '>' . $this->tag->render() . '</div>';
+        return $this->contentElementEditableService->wrapContentProperty($node, $property, $this->tag->render());
     }
 
     /**
@@ -114,7 +118,7 @@ class EditableViewHelper extends AbstractTagBasedViewHelper
     {
         $node = $this->getContextVariable('node');
         if ($node === null) {
-            throw new ViewHelperException('This ViewHelper can only be used in a TypoScript content element. You have to specify the "node" argument if it cannot be resolved from the TypoScript context.', 1385737102);
+            throw new ViewHelperException('This ViewHelper can only be used in a Fusion content element. You have to specify the "node" argument if it cannot be resolved from the Fusion context.', 1385737102);
         }
 
         return $node;
